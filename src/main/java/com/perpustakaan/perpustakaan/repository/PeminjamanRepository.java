@@ -20,5 +20,6 @@ public interface PeminjamanRepository extends JpaRepository<PeminjamanEntity, Lo
     void deleteByMahasiswa(MahasiswaEntity mahasiswa);
     void deleteByBuku(BukuEntity buku);
     long countByMahasiswaIdAndTanggalPeminjamanBetweenAndStatus(Long mahasiswaId, LocalDate startDate, LocalDate endDate, PeminjamanEntity.Status status);
+    List<PeminjamanEntity> findByTanggalBatasPengembalianBeforeAndStatus(LocalDate date, PeminjamanEntity.Status status);
 }
 
