@@ -8,22 +8,26 @@ option java_outer_classname = "PerpustakaanProto";
 
 service PerpustakaanService {
     // Mahasiswa CRUD
+    rpc GetAllMahasiswa (GetAllMahasiswaRequest) returns (GetAllMahasiswaResponse);
     rpc GetMahasiswa (GetMahasiswaRequest) returns (GetMahasiswaResponse);
     rpc CreateMahasiswa (CreateMahasiswaRequest) returns (CreateMahasiswaResponse);
     rpc UpdateMahasiswa (UpdateMahasiswaRequest) returns (UpdateMahasiswaResponse);
     rpc DeleteMahasiswa (DeleteMahasiswaRequest) returns (DeleteMahasiswaResponse);
 
     // Buku CRUD
+    rpc GetAllBuku (GetAllBukuRequest) returns (GetAllBukuResponse);
     rpc GetBuku (GetBukuRequest) returns (GetBukuResponse);
     rpc CreateBuku (CreateBukuRequest) returns (CreateBukuResponse);
     rpc UpdateBuku (UpdateBukuRequest) returns (UpdateBukuResponse);
     rpc DeleteBuku (DeleteBukuRequest) returns (DeleteBukuResponse);
 
     // Peminjaman CRUD
+    rpc GetAllPeminjaman (GetAllPeminjamanRequest) returns (GetAllPeminjamanResponse);
     rpc GetPeminjaman (GetPeminjamanRequest) returns (GetPeminjamanResponse);
     rpc CreatePeminjaman (CreatePeminjamanRequest) returns (CreatePeminjamanResponse);
     rpc UpdatePeminjaman (UpdatePeminjamanRequest) returns (UpdatePeminjamanResponse);
     rpc DeletePeminjaman (DeletePeminjamanRequest) returns (DeletePeminjamanResponse);
+    rpc PengembalianBuku (PengembalianBukuRequest) returns (PengembalianBukuResponse);
 }
 
 // Mahasiswa message definitions
@@ -31,6 +35,12 @@ message Mahasiswa {
     string nama = 1;
     string nim = 2;
     string jurusan = 3;
+}
+
+message GetAllMahasiswaRequest {}
+
+message GetAllMahasiswaResponse {
+    repeated Mahasiswa mahasiswa = 1;
 }
 
 message GetMahasiswaRequest {
@@ -67,14 +77,21 @@ message DeleteMahasiswaResponse {
 
 // Buku message definitions
 message Buku {
-    string judul = 1;
-    string penulis = 2;
-    int32 kuantitas = 3;
-    string tempat_penyimpanan = 4;
+    int64 id = 1;
+    string judul = 2;
+    string penulis = 3;
+    int32 kuantitas = 4;
+    string tempat_penyimpanan = 5;
+}
+
+message GetAllBukuRequest {}
+
+message GetAllBukuResponse {
+    repeated Buku bukuList = 1;
 }
 
 message GetBukuRequest {
-    string judul = 1;
+    int64 id = 1;
 }
 
 message GetBukuResponse {
@@ -98,7 +115,7 @@ message UpdateBukuResponse {
 }
 
 message DeleteBukuRequest {
-    string judul = 1;
+    int64 id = 1;
 }
 
 message DeleteBukuResponse {
@@ -107,16 +124,23 @@ message DeleteBukuResponse {
 
 // Peminjaman message definitions
 message Peminjaman {
-    int64 mahasiswa_id = 1;
-    int64 buku_id = 2;
-    string tanggal_peminjaman = 3;
-    string tanggal_batas_pengembalian = 4;
-    string tanggal_pengembalian = 5;
-    string status = 6;
+    int64 id = 1;
+    int64 mahasiswa_id = 2;
+    int64 buku_id = 3;
+    string tanggal_peminjaman = 4;
+    string tanggal_batas_pengembalian = 5;
+    string tanggal_pengembalian = 6;
+    string status = 7;
+}
+
+message GetAllPeminjamanRequest {}
+
+message GetAllPeminjamanResponse {
+    repeated Peminjaman peminjamanList = 1;
 }
 
 message GetPeminjamanRequest {
-    int64 mahasiswa_id = 1;
+    int64 id = 1;
 }
 
 message GetPeminjamanResponse {
@@ -140,10 +164,19 @@ message UpdatePeminjamanResponse {
 }
 
 message DeletePeminjamanRequest {
-    int64 mahasiswa_id = 1;
-    int64 buku_id = 2;
+    int64 id = 1;
 }
 
 message DeletePeminjamanResponse {
     bool success = 1;
+}
+
+message PengembalianBukuRequest {
+    int64 peminjaman_id = 1;
+    string tanggal_pengembalian = 2;
+}
+
+message PengembalianBukuResponse {
+    Peminjaman peminjaman = 1;
+    int32 denda = 2;
 }

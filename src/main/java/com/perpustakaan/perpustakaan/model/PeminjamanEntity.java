@@ -2,6 +2,7 @@ package com.perpustakaan.perpustakaan.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table(name = "peminjaman")
@@ -94,4 +95,24 @@ public class PeminjamanEntity {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    public int hitungDenda(LocalDate tanggalPengembalian) {
+        if (tanggalPengembalian.isBefore(this.tanggalBatasPengembalian) || tanggalPengembalian.isEqual(this.tanggalBatasPengembalian)) {
+            return 0;
+        }
+
+        long daysLate = ChronoUnit.DAYS.between(this.tanggalBatasPengembalian, tanggalPengembalian);
+        int denda = 0;
+        int multiplier = 1;
+
+        for (int i = 1; i <= daysLate; i++) {
+            denda += 1000 * multiplier;
+            if (i % 2 == 0) {
+                multiplier++;
+            }
+        }
+        
+        return denda;
+    }
+
 }
